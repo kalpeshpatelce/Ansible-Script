@@ -13,3 +13,17 @@
      vi ping.yml
      ansible-playbook ping.yml
 ````
+Ping.yml
+````
+   ---
+   # This Playbook uses the win_ping module to test connectivity of windows host
+     - name: Ping
+       hosts: all
+       tasks:
+       - name: ping
+         ping:
+````
+run Ping PlayBook
+````
+ ansible-playbook /etc/ansible/yml/ping.yml 
+````
