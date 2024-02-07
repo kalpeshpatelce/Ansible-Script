@@ -1,0 +1,7 @@
+---
+- name: SHUTDOWN
+  hosts: 716A
+  gather_facts: no
+  tasks:
+  - name: Shutdown
+    win_shell: shutdown -s -f -t 00

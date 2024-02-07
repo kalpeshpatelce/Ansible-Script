@@ -1,0 +1,16 @@
+---
+- name: Collect Serial No
+  hosts: FYECLAB2
+  gather_facts: no
+  tasks:
+
+  - name: ping
+    win_ping:
+
+  - name: Get Serial
+    win_shell:  gwmi win32_bios | fl SerialNumber
+    register: output
+
+  - name: Display SerialNO
+    debug:
+      var: output

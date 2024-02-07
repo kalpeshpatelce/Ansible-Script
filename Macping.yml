@@ -1,0 +1,17 @@
+---
+ - name: "Get ping response"
+   hosts: Apple
+   become_method: runas
+ 
+   vars:
+     ansible_become_password: password
+
+   tasks:
+   - name: Test
+     command: sudo reboot
+     become: yes
+     become_user: apple3
+#   - action: ping
+     register: hello
+   - debug: msg="{hello.stdout}"
+

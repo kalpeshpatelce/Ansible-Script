@@ -1,0 +1,13 @@
+---
+- hosts: Apple
+  become: yes
+  vars:
+    apps_name: Edge
+    apps_url: https://officecdn-microsoft-com.akamaized.net/pr/C1297A47-86C4-4C1F-97FA-950631F94777/MacAutoupdate/MicrosoftEdge-85.0.564.44.pkg?platform=Mac&Consent=0&channel=Stable
+    installer_type: app
+    install_method: pkg
+    download_file_type: pkg
+  roles:
+    - setup
+    - installer
+    - cleanup

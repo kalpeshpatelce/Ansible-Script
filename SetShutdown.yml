@@ -1,0 +1,17 @@
+---
+- name: Charusat Service
+  hosts: 726B
+  gather_facts: no
+  tasks:
+
+  - name: ping
+    win_ping:
+
+  - name: Reset Password
+    win_shell: Net user CharusatApps ceit
+
+  - name: Start Charusat Service
+    win_shell: Get-service CharusatApps | Start-service
+  
+  - name: CharusatApps Service to Manual
+    win_command: time 16:28:00

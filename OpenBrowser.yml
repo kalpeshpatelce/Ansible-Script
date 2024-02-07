@@ -1,0 +1,17 @@
+---
+- name: Open Browser
+  hosts: 172.16.2.47
+  gather_facts: no
+
+  vars:
+    ansible_become_user: Administrator
+    ansible_become_pass: ceit
+
+  tasks:
+   
+  - name: Open Charusat Website in Chrome browser
+    win_shell: start-process -FilePath 'C:\Program Files (x86)\Google\Chrome\Application\chrome.exe' -ArgumentList 'www.charusat.ac.in'
+    become: yes
+    become_method: runas
+
+

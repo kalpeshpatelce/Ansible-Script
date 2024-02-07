@@ -1,0 +1,35 @@
+---
+# This Playbook uses the win_ping module to test connectivity of windows host
+- name: Ping to 
+  hosts: 715B
+  gather_facts: no
+  become_method: runas
+
+  vars:
+    ansible_become_user: Administrator
+    ansible_become_pass: password
+
+  tasks:
+  - name: ping
+    win_ping:
+
+  - name: stop Windows Services
+    win_shell: stop-service wuauserv
+
+  - name: Disable Windows Service
+    win_shell: set-service wuauserv startup disabled
+
+#  - name: Install PEXA
+#    win_shell: C:\PEXAInstallation.ps1
+#    become: yes
+#    become_method: runas
+
+#  - name: Clean Desktop
+#    win_shell: Remove-Item C:\Users\Administrator\Desktop\* -Force
+#   become: yes
+#    become_method: runas
+
+#  - name: Create shortcut
+#    win_shortcut:
+#      src: C:\PEXA\EFH.exe
+#      dest: C:\Users\Administrator\Desktop\EPH.lnk

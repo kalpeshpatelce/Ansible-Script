@@ -1,0 +1,23 @@
+BIOSConfig 1.0
+UEFI Boot Sources
+	USB Floppy/CD
+	USB Hard Drive
+Legacy Boot Sources
+	Network Controller (Realtek PXE B04 D00)
+	Hard Drive
+	USB Floppy/CD
+Network Boot
+	*Enable
+	Disable
+Virtualization Technology (VTx/VTd)
+	*Disable
+	Enable
+S4/S5 Wake on LAN
+	Disable
+	*Enable
+Remote Wakeup Boot Source
+	*Remote Server
+	Local Hard Drive
+Wake on LAN Power-On Password Policy
+	Require Password
+	*Bypass Password

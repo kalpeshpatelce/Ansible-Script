@@ -1,0 +1,24 @@
+---
+# This Playbook uses the win_ping module to test connectivity of windows host
+- name: Ping to 
+  hosts: [Windows]
+  gather_facts: no
+  become_method: runas
+
+  vars:
+#     ansible_become_password:ceit
+#     ansible_ssh_user:Administrator
+#     ansible_ssh_pass:password
+#     ansible_ssh_port:5986
+#     ansible_connection:winrm
+#     ansible_winrm_server_cert_validation:ignore
+
+  tasks:
+  - name: ping
+    win_ping:
+#    become: yes
+#    become_user: Administrator
+
+#- name: Simple A record (IPV4 address) lookup for example.com
+#  debug: msg="{{ lookup('dig', 'example.com.')}}"
+#---

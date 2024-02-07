@@ -1,0 +1,16 @@
+---
+- name: wakeup 716B
+  hosts: kalpesh
+  gather_facts: no
+  become_method: runas
+
+  vars:
+    ansible_become_password: password
+
+  tasks:
+  - name: Ping
+    win_ping:
+  - name: copyfile
+    win_shell: wakemeonlan.exe /wakeup 80CE62F14191
+    become: yes
+    become_user: Administrator

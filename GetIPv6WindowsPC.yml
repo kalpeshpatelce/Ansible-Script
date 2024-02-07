@@ -1,0 +1,20 @@
+---
+- name: Get IPv6 Address
+  hosts: ipv6test
+  become_method: enable
+  gather_facts: no
+  connection: local
+  #connection: network_cli
+ 
+
+  tasks:
+  - name: Ping Test
+    win_ping:
+
+  - name: Get IP 
+    win_shell: Get-WmiObject win32_networkadapterconfiguration -filter "ipenabled = 'True'"
+    register: output
+
+  - name: PRINT OUT THE OUTPUT VARIABLE
+    debug:
+      var: output   

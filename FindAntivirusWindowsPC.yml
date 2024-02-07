@@ -1,0 +1,18 @@
+---
+# This Playbook uses the win_ping module to test connectivity of windows host
+- name: find antivirus 
+  hosts: 716B
+  gather_facts: no
+
+
+  tasks:
+  - name: Find Antivirus Product
+    win_shell: Get-CimInstance -Namespace root/SecurityCenter2 -ClassName AntivirusProduct
+    register: output
+    
+  - debug: 
+      var: output
+
+#- name: Simple A record (IPV4 address) lookup for example.com
+#  debug: msg="{{ lookup('dig', 'example.com.')}}"
+#---

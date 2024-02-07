@@ -1,0 +1,27 @@
+---
+- name: Add User in Remote Desktop Group
+  hosts: EE
+  gather_facts: no
+  become_method: runas
+
+  vars:
+    ansible_become_password: password
+
+  tasks:
+  - name: ping
+    win_ping:
+
+  - name: Reset Password of Student User
+    win_shell: net user student student
+    ignore_errors: yes
+    become: yes
+    become_user: Administrator
+
+  - name: Add User to Remote Desktop Group
+    win_shell: Add-LocalGroupMember -Group 'Remote Desktop Users' -Member 'everyone'
+#   ignore_errors: yes
+
+  - name: Reboot Computer
+    win_shell: shutdown -r -f -t 00
+    become: yes
+    become_user: Administrator

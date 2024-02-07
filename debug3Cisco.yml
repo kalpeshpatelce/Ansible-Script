@@ -1,0 +1,207 @@
+#ansible-playbook debug3.yml --extra-vars "host=PCIP vlan=21"
+---
+- name: IP
+  hosts: '{{host}}'
+  gather_facts: no
+  become_method: runas
+  vars:
+    ansible_become_password: password
+    SwitchIP: "Not Configured"
+    SwitchPort: ""
+    SwitchHost: ""
+    Lab: "Not configured"
+    HostIP: "{{ansible_host}}"
+    IPDigit: "{{ HostIP.split('.') [3] }}"
+    IPDigitInt: "{{IPDigit|int}}"
+
+  tasks:
+
+  - name: 716B Check IP 172.16.2.1-23
+    set_fact:
+      Lab: "716B"
+      SwitchIP: "172.16.8.169"
+  - add_host:
+       groups: brd
+       hostname: "172.16.8.169"
+       SwitchPort: "{{IPDigitInt | int }}"
+    when:  ({{IPDigitInt | int }}>=1 and {{IPDigitInt | int }}<=23)
+
+  - name: 716A Check IP 172.16.2.26-48
+    set_fact:
+      SwitchPort: "{{IPDigitInt | int - 25}}"
+      Lab: "716A"
+      SwitchIP: "172.16.8.171"
+  - add_host:
+       groups: brd
+       hostname: "172.16.8.171"
+       SwitchPort: "{{IPDigitInt | int - 25 }}"
+    when:  ({{IPDigitInt | int }}>=26  and {{IPDigitInt | int }}<=48)
+
+  - name: 716A Check IP 172.16.2.49
+    set_fact:
+      SwitchPort: "{{IPDigitInt | int - 30 }}"
+      Lab: "716A"
+      SwitchIP: "172.16.8.171"
+  - add_host:
+       groups: brd
+       hostname: "172.16.8.171"
+       SwitchPort: "{{IPDigitInt | int - 30 }}"
+    when:  ({{IPDigitInt | int }}==49)
+
+  - name: 716B Check IP 172.16.2.24
+    set_fact:
+      SwitchPort: "{{IPDigitInt | int - 23 }}"
+      Lab: "716B"
+      SwitchIP: "172.16.8.170"
+  - add_host:
+       groups: brd
+       hostname: "172.16.8.170"
+       SwitchPort: "{{IPDigitInt | int - 23 }}"
+    when:  ({{IPDigitInt | int }}==24)
+
+  - name: 715B Check IP 172.16.2.101-125
+    set_fact:
+      SwitchPort: "{{IPDigitInt | int - 100 }}"
+      Lab: "715B"
+      SwitchIP: "172.16.8.165"
+  - add_host:
+       groups: brd
+       hostname: "172.16.8.165"
+       SwitchPort: "{{IPDigitInt | int - 100}}"
+    when:  ({{IPDigitInt | int }}>=101 and {{ IPDigitInt | int }}<=125 )
+
+  - name: 715A Check IP 172.16.2.126-150
+    set_fact:
+      SwitchPort: "{{IPDigitInt | int - 125 }}"
+      Lab: "715A"
+      SwitchIP: "172.16.8.168"
+  - add_host:
+       groups: brd
+       hostname: "172.16.8.168"
+       SwitchPort: "{{IPDigitInt | int - 125 }}"
+    when:  ({{IPDigitInt | int }}>=126 and {{ IPDigitInt | int }}<=150)
+
+  - name: 715D Check IP 172.16.2.151-175
+    set_fact:
+      SwitchPort: "{{IPDigitInt | int - 150 }}"
+      Lab: "715D"
+      SwitchIP: "172.16.8.166"
+  - add_host:
+       groups: brd
+       hostname: "172.16.8.166"
+       SwitchPort: "{{IPDigitInt | int - 150 }}"
+    when:  ({{IPDigitInt | int }}>=151 and {{ IPDigitInt | int }}<=175) 
+
+  - name: 715D Check IP 172.16.2.174
+    set_fact:
+      SwitchPort: "{{IPDigitInt | int - 172 }}"
+      Lab: "715D"
+      SwitchIP: "172.16.8.167"
+  - add_host:
+       groups: brd
+       hostname: "172.16.8.167"
+       SwitchPort: "{{IPDigitInt | int - 172 }}"
+    when:  ({{IPDigitInt | int }}==174)
+
+  - name: 715C Check IP 172.16.2.176-200
+    set_fact:
+      SwitchPort: "{{IPDigitInt | int - 175 }}"
+      Lab: "715C"
+      SwitchIP: "172.16.8.163"
+  - add_host:
+       groups: brd
+       hostname: "172.16.8.163"
+       SwitchPort: "{{IPDigitInt | int - 175}}"
+    when:  ({{IPDigitInt | int }}>=176 and {{ IPDigitInt | int }}<=200)
+
+  - name: 715C Check IP 172.16.2.199
+    set_fact:
+      SwitchPort: "{{IPDigitInt | int - 198 }}"
+      Lab: "715C"
+      SwitchIP: "172.16.8.164"
+  - add_host:
+       groups: brd
+       hostname: "172.16.8.164"
+       SwitchPort: "{{IPDigitInt | int - 198 }}"
+    when:  ({{IPDigitInt | int }}>=199 and {{ IPDigitInt | int }}<=200)
+
+  - debug:
+      msg: "  {{ Lab }} | {{ host }} | IPend={{ IPDigitInt }} | Port={{SwitchPort}} | {{SwitchIP}} "
+
+
+#******************************Set Bios & Reboot PC****************************************
+
+  - name: ping
+    win_ping:
+    ignore_errors: yes
+
+  - name: Remove BCU folder if Exist
+    win_shell: rm -r c:\BCU | out-null
+    ignore_errors: yes
+    become: yes
+    become_user: Administrator
+
+  - name: Make BCU Directory
+    win_shell: mkdir c:\BCU
+    ignore_errors: yes
+
+  - name: Copy BiosConfigurationUtility
+    win_shell: wget http://kalpeshpc:8080/BiosConfigUtility64.exe -OutFile C:\bcu\BiosConfigUtility64.exe
+    ignore_errors: yes
+
+  - name: Copy config File
+    win_shell: wget http://kalpeshpc:8080/HPBiosConfigNetworkFirst.txt -OutFile C:\bcu\HPBiosConfigNetworkFirst.txt
+    ignore_errors: yes
+
+  - name: Configure Bios of Remote PC
+    win_shell: C:\bcu\BiosConfigUtility64.exe /Set:c:\bcu\HPBiosConfigNetworkFirst.txt
+    ignore_errors: yes
+    become: yes
+    become_user: Administrator
+
+  - name: Remove BCU folder
+    win_shell: rm -r c:\BCU | out-null
+    ignore_errors: yes
+    become: yes
+    become_user: Administrator
+
+
+#***********************************Cisco Switch Part**************************************
+
+
+- name: Add int to VLAN
+  hosts: brd
+  become_method: enable
+  gather_facts: no
+  connection: local
+  #connection: network_cli
+
+  tasks:
+  - name: Ping Test
+    ios_ping:
+      dest: 172.16.2.171 
+
+  - name: Configure Provider
+    set_fact:
+      provider:
+        username: kalpesh
+        password: password
+
+  - name: Create vlan
+    ios_vlan:
+      vlan_id: '{{vlan}}'
+      name: WDS
+      state: present
+
+  - name: Add interfaces to VLAN
+    ios_vlan:
+      vlan_id: '{{vlan}}'
+      interfaces:
+        - GigabitEthernet1/0/{{ SwitchPort }}
+        
+  - name: Check if interfaces is assigned to VLAN
+    ios_vlan:
+      vlan_id: '{{vlan}}'
+      associated_interfaces:
+        - GigabitEthernet1/0/{{ SwitchPort }}
+#        - GigabitEthernet1/0/10

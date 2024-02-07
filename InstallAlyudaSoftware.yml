@@ -1,0 +1,20 @@
+---
+- name: Alyuda
+  hosts: MCA
+  gather_facts: no
+  become_method: runas
+
+  vars:
+    ansible_become_password: password
+
+  tasks:
+  - name: Alyuda
+    win_shell: Copy-Item "\\172.16.12.198\SoftwareSources\AlyudaNeuroIntelligence" -Destination "C:\Program Files (x86)" -Recurse
+    become: yes
+    become_user: Administrator
+
+  - name: Create Shotcuts
+    win_shortcut:
+      src: C:\Program Files (x86)\AlyudaNeuroIntelligence\NeuroIntelligence.exe
+      dest: C:\Users\8cmpica20\Desktop\NeuroIntelligence.lnk
+      

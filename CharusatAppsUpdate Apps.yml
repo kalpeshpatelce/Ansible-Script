@@ -1,0 +1,22 @@
+---
+- name: Update CharusatApps
+  hosts: 726A
+  gather_facts: no
+
+  vars:
+    ansible_become_user: Administrator
+    ansible_become_pass: password
+
+  tasks:
+
+  - name: Copy bat file
+    win_get_url:
+      url: http://172.16.12.198:8080/AutoUpdate.bat
+      dest: C:\
+    
+  - name: Update CharusatApps Application
+    win_shell:  C:\AutoUpdate.bat
+    become: yes
+    become_method: runas
+
+

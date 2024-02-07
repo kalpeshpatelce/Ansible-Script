@@ -1,0 +1,21 @@
+---
+- name: Charusat Service
+  hosts: 715A
+  gather_facts: no
+  tasks:
+
+  - name: ping
+    win_ping:
+
+  - name: Set Monitor sleep time to Never
+    win_shell: Powercfg /Change monitor-timeout-ac 0
+
+  - name: Set PC Sleep Time to Never
+    win_shell: Powercfg /Change standby-timeout-ac 0
+  
+#  - name: WinRM Service to Manual
+#    win_shell: shutdown -r -f -t 00
+
+#  - name: WinRM Service to Automatic
+#    win_shell: Set-Service winRM -StartupType Automatic
+

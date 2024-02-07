@@ -1,0 +1,59 @@
+---
+- hosts: 714D
+  gather_facts: yes
+  vars:
+    switchip:
+    FinalPortNo:
+    L715DSWIP: "172.16.8.166"
+    test: "{{ ansible_host }}"
+    kalpesh: "{{ test.split('.') [3]}}"
+    Lab715DPortNo: "{{ kalpesh|int - 150 }}"
+    Lab716APortNo: "{{ kalpesh|int - 25 }}"
+    Lab715D: "bye World"
+#    Lab715D: "151,152,153,154,155,156,157,158,159,16105,161,162,163,164,165,166,167,168,169,170,171,172,173.174,17"
+    Lab716A: "26,27,28,29,30,31,32,33,34,35,36,37,38,39,40,41,42,43,44,45,46,47,48"
+
+
+  tasks:
+  
+  - name: Find Switch IP and Port
+    debug:
+      msg: "Equals"
+    when: Lab715D("World") != -1
+
+#  - debug:
+#      msg: " {{ switchip }} | {{ switchport }} | {{ kalpesh }}"
+
+
+
+#    - debug: var=hostvars[ansible_host]['ansible_default_ipv4']['address']
+#    - debug: var=[ansible_host]
+
+#    - debug: 
+#         msg: "{{ kalpesh }}"
+#        msg: "{{ test.split('.') [3]}}"
+#        msg: "{{ test.split('.') }}"
+#        kalpesh: "ansible Example"
+#        msg: "{{ kalpesh }}"
+
+#    - debug:
+#        msg: "715D LAB Match Found and Switch IP is {{ L715DSWIP }}"
+#      when:  Lab715D search("{{ kalpesh }}")
+
+#    - set_fact:
+#         switchip: "{{ L715DSWIP }}"
+#         switchport: "{{ Lab715DPortNo }}"
+#      when: Lab715D.find( {{ kalpesh }}") != -1
+#       msg: "Equals"
+
+#    - debug: 
+#        msg: " {{ switchip }} | {{ switchport }} | {{ kalpesh }}"
+#        msg: " {{ switchport }}"
+
+#    - debug:
+#        msg: "716A LAB Match Found"
+#      when:  Lab716A | search("{{ kalpesh }}")
+
+
+#    - debug:
+#        msg: "{{ FinalPortNo }}"

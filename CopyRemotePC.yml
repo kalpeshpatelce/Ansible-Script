@@ -1,0 +1,17 @@
+---
+- name: copyfile
+  hosts: all
+  gather_facts: no
+
+  vars:
+    ansible_become_user: Administrator
+    ansible_become_pass: password
+
+  tasks:
+  - name: copyfile
+    win_copy: 
+      src: \\172.16.12.198\SoftwareSources\DataMiningShortCuts
+      dest: C:\Users\Administrator\Desktop\
+      remote_src: yes
+    become: yes
+    become_method: runas

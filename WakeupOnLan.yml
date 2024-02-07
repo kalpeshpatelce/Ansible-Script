@@ -1,0 +1,23 @@
+---
+# This Playbook uses the win_ping module to test connectivity of windows host
+- name: Ping
+  hosts: RP
+  gather_facts: no
+
+
+  tasks:
+
+  - name: Send a magic Wake-on-LAN packet to 00:00:5E:00:53:66
+    wakeonlan:
+      mac: 'A0:D3:C1:2D:74:79'
+      broadcast: 172.16.13.73
+    delegate_to: localhost
+
+  - wakeonlan:
+      mac: A0:D3:C1:2D:74:79
+      port: 9
+    delegate_to: localhost
+
+
+#  - name: ping
+#    win_ping:

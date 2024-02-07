@@ -1,0 +1,27 @@
+---
+- hosts: 714D
+  gather_facts: yes
+  vars:
+    test: "{{ ansible_host }}"
+#    kalpesh: "{{ test.split('.') [3]}}"
+    kalpesh: [17]
+    PortNo: "17,18,19"
+#    PortNo: "26,27,28,29,30,31,32,33,34,35,17,36,38,39,40,41,42,43,44,45,46,47,48,49,50"
+  tasks:
+#      - command: echo {{ item }}
+#        with_items: [ 0, 2, 4, 6, 8, 10 ]
+#        when: item > 5
+
+#    - debug: var=hostvars[ansible_host]['ansible_default_ipv4']['address']
+#    - debug: var=[ansible_host]
+
+#    - debug:
+#        msg: "{{ test.split('.') [3]}}"
+#        msg: "{{ test.split('.') }}"
+#        kalpesh: "ansible Example"
+#        msg: "{{ kalpesh }}"
+
+    - debug:
+        msg: "Match Found"
+      when:  PortNo | search("17")
+

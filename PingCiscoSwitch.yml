@@ -1,0 +1,10 @@
+---
+- name: Test Ping
+  hosts: ciscodevice
+  gather_facts: no
+  connection: local
+
+  tasks:
+  - name: Ping To Cisco Switch
+    ios_ping:
+     dest: 172.16.8.65

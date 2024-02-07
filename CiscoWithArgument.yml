@@ -1,0 +1,40 @@
+# Please Pass Variable Using --extra-vars hostip,vlan,portno
+---
+- name: Add int to VLAN
+  hosts: '{{ hostip }}'
+  become_method: enable
+  gather_facts: no
+  connection: local
+  #connection: network_cli
+#  vars:
+#    ansible_ssh_user:kalpesh
+#    ansible_ssh_pass:passowrd
+  tasks:
+  - name: Ping Test
+    ios_ping:
+      dest: 172.16.8.168  
+
+  - name: Configure Provider
+    set_fact:
+      provider:
+        username: kalpesh
+        password: Passowrd
+
+  - name: Create vlan
+    ios_vlan:
+      vlan_id: '{{vlan}}'
+      name: WDS
+      state: present
+
+  - name: Add interfaces to VLAN
+    ios_vlan:
+      vlan_id: '{{vlan}}'
+      interfaces:
+        - GigabitEthernet1/0/{{ portno }}
+        
+  - name: Check if interfaces is assigned to VLAN
+    ios_vlan:
+      vlan_id: '{{vlan}}'
+      associated_interfaces:
+        - GigabitEthernet1/0/{{ portno }}
+#        - GigabitEthernet1/0/10

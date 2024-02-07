@@ -1,0 +1,25 @@
+---
+- name: MatLab
+  hosts: 716A
+  gather_facts: no
+
+  vars:
+    ansible_become_user: Administrator
+    ansible_become_pass: ceit
+
+  tasks:
+  - name: ping
+    win_ping:
+
+  - name: Add ID Password
+    win_shell: cmdkey /add:172.16.16.26 /user:Administrator /password:ceit
+    become: yes
+    become_user: Administrator
+
+  - name: MatLab copy file
+    win_copy: 
+      src: \\172.16.16.26\Matlab latest version\R2021a_Windows.iso
+      dest: C:\
+      remote_src: yes
+    become: yes
+    become_method: runas

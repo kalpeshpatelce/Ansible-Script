@@ -1,0 +1,15 @@
+---
+- name: Rename PC
+  hosts: '{{ hostip }}'
+  gather_facts: no
+  tasks:
+
+#  - name: ping
+#    win_ping:
+#    ignore_errors: yes
+
+  - name: Rename PC
+    win_shell: Rename-Computer -NewName '{{ PCNAME }}'
+
+  - name: Restart PC
+    win_shell: shutdown -r -f -t 00

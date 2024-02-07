@@ -1,0 +1,77 @@
+---
+- name: Change Bios Boot Order of Remote PC
+  hosts: 714D
+  gather_facts: no
+  become_method: runas
+
+  vars:
+    ansible_become_password: ceit
+
+  tasks:
+  - name: ping
+    win_ping:
+
+  - name: Remove BCU folder if Exist
+    win_shell: rm -r c:\BCU | out-null
+    ignore_errors: yes
+    become: yes
+    become_user: Administrator
+
+  - name: Make BCU Directory
+    win_shell: mkdir c:\BCU
+    ignore_errors: yes
+
+  - name: Copy BiosConfigurationUtility
+    win_shell: wget http://wdsserver:8080/BiosConfigUtility64.exe -OutFile C:\bcu\BiosConfigUtility64.exe
+
+  - name: Copy config File
+    win_shell: wget http://wdsserver:8080/Config/HPBiosConfigNetworkFirst.txt -OutFile C:\bcu\HPBiosConfigNetworkFirst.txt
+ 
+
+  - name: Configure Bios of Remote PC
+    win_shell: C:\bcu\BiosConfigUtility64.exe /Set:c:\bcu\HPBiosConfigNetworkFirst.txt
+    ignore_errors: yes
+    become: yes
+    become_user: Administrator
+
+  - name: Remove BCU folder
+    win_shell: rm -r c:\BCU | out-null
+    ignore_errors: yes
+    become: yes
+    become_user: Administrator
+
+
+  - name: Reboot Computer
+    win_shell: shutdown -r -f -t 00
+    become: yes
+    become_user: Administrator
+
+- name: Configure Cisco Switch
+  hosts: cisco
+  become_method: enable
+  gather_facts: no
+  connection: local
+  #connection: network_cli
+
+  tasks:
+  - name: Ping Test
+    ios_ping:
+      dest: 172.16.8.163
+  - name: Create vlan           
+    ios_vlan: 
+      vlan_id: 21
+      name: WDS
+      state: present
+
+  - name: Add interfaces to VLAN
+    ios_vlan:
+      vlan_id: 21
+      interfaces:
+        - GigabitEthernet1/0/1
+
+  - name: Check if interfaces is assigned to VLAN
+    ios_vlan:
+      vlan_id: 21
+      associated_interfaces:
+        - GigabitEthernet1/0/1
+#        - GigabitEthernet1/0/10    

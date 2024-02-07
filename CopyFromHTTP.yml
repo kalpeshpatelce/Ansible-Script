@@ -1,0 +1,17 @@
+---
+- name: copyfile
+  hosts: FYECLAB1
+  gather_facts: no
+  become_method: runas
+
+#  vars:
+#    ansible_become_password: password
+
+  tasks:
+  - name: ping
+    win_ping:
+
+  - name: copy PROTEST 708 File
+    win_shell: Invoke-WebRequest -Uri "http://172.16.12.198:8080/PROTEUS7.8.exe" -OutFile "C:\Users\Administrator\Desktop\PROTEUS7.8.exe"
+#    become: yes
+#    become_user: Administrator

@@ -1,0 +1,7 @@
+---
+- name: anaconda
+  hosts: all
+
+  tasks:
+  - name: anaconda
+    win_shell: choco install anaconda -y -f --allow-empty-checksums

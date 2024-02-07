@@ -1,0 +1,130 @@
+---
+- name: IP
+  hosts: 714D
+  gather_facts: no
+  vars:
+    SwitchIP: "Not Configured"
+    SwitchPort: ""
+    Lab: "Not configured"
+    HostIP: "{{ansible_host}}"
+    IPDigit: "{{ HostIP.split('.') [3] }}"
+    IPDigitInt: "{{IPDigit|int}}"
+#    Lab: "10"
+#      with_items:
+#        - 10
+#        - 11
+  tasks:
+
+  - name: 716B Check IP 172.16.2.1-23
+    set_fact:
+      SwitchIP: "172.16.8.169"
+      SwitchPort: "{{IPDigitInt | int }}"
+      Lab: "716B"
+    when:  ({{IPDigitInt | int }}>=1 and {{IPDigitInt | int }}<=23)
+
+  - name: 716A Check IP 172.16.2.26-48
+    set_fact:
+      SwitchIP: "172.16.8.171"
+      SwitchPort: "{{IPDigitInt | int - 25}}"
+      Lab: "716A"
+    when:  ({{IPDigitInt | int }}>=26  and {{IPDigitInt | int }}<=48)
+
+  - name: 716A Check IP 172.16.2.49
+    set_fact:
+      SwitchIP: "172.16.8.171"
+      SwitchPort: "{{IPDigitInt | int - 30 }}"
+      Lab: "716A"
+    when:  ({{IPDigitInt | int }}==49)
+
+  - name: 716B Check IP 172.16.2.24
+    set_fact:
+      SwitchIP: "172.16.8.170"
+      SwitchPort: "{{IPDigitInt | int - 23 }}"
+      Lab: "716B"
+    when:  ({{IPDigitInt | int }}==24)
+
+  - name: 715B Check IP 172.16.2.101-125
+    set_fact:
+      SwitchIP: "172.16.8.165"
+      SwitchPort: "{{IPDigitInt | int - 100 }}"
+      Lab: "715B"
+    when:  ({{IPDigitInt | int }}>=101 and {{ IPDigitInt | int }}<=125 )
+
+  - name: 715A Check IP 172.16.2.126-150
+    set_fact:
+      SwitchIP: "172.16.8.168"
+      SwitchPort: "{{IPDigitInt | int - 125 }}"
+      Lab: "715A"
+    when:  ({{IPDigitInt | int }}>=126 and {{ IPDigitInt | int }}<=150)
+
+  - name: 715D Check IP 172.16.2.151-175
+    set_fact:
+      SwitchIP: "172.16.8.166"
+      SwitchPort: "{{IPDigitInt | int - 150 }}"
+      Lab: "715D"
+    when:  ({{IPDigitInt | int }}>=151 and {{ IPDigitInt | int }}<=175) 
+
+  - name: 715D Check IP 172.16.2.174
+    set_fact:
+      SwitchIP: "172.16.8.167"
+      SwitchPort: "{{IPDigitInt | int - 172 }}"
+      Lab: "715D"
+    when:  ({{IPDigitInt | int }}==174)
+
+  - name: 715C Check IP 172.16.2.176-200
+    set_fact:
+      SwitchIP: "172.16.8.163"
+      SwitchPort: "{{IPDigitInt | int - 175 }}"
+      Lab: "715C"
+    when:  ({{IPDigitInt | int }}>=176 and {{ IPDigitInt | int }}<=200)
+
+  - name: 715C Check IP 172.16.2.199
+    set_fact:
+      SwitchIP: "172.16.8.164"
+      SwitchPort: "{{IPDigitInt | int - 198 }}"
+      Lab: "715C"
+    when:  ({{IPDigitInt | int }}==199)
+
+  - debug:
+       msg: "  {{ Lab }} | {{ HostIP }} | {{ IPDigitInt }} | {{IPDigit}} | {{SwitchIP}} | {{SwitchPort}}"
+    register: output
+
+
+
+#- name: Configure Cisco Switch
+#  hosts: SwitchIP
+#  become_method: enable
+#  gather_facts: no
+#  connection: local
+  #connection: network_cli
+
+#  tasks:
+#  - name: Ping Test
+#    ios_ping:
+#      dest: " {{ SwitchIP }} "
+
+
+#    when: Lab715D("World") != -1
+
+
+
+#  - set_fact: 
+#      IPDigitInt: 13
+
+#  - name: find
+#    with_items: [ 0, 2, 4, 6, 8, 10 ]
+
+#    debug:
+#      msg:""
+#      msg: "Equals | {{ HostIP }} | {{ IPDigitInt }} | {{IPDigit}}"
+#    when: "'10' in {{Lab}}"
+
+
+
+
+#    when: test1.find("160") != -1
+#    when:  (IPDigitInt>= 1 and IPDigitInt<=24)
+#    when:  (IPDigitInt == 13)
+#    when: IPDigitInt | select('match', "{{ Lab.split(',') }}")
+
+

@@ -1,0 +1,80 @@
+---
+- name: Data Mining Tools
+  hosts: MCA
+  gather_facts: no
+  become_method: runas
+
+  vars:
+    ansible_become_password: Admin@20410d
+
+  tasks:
+  - name: ping
+    win_ping:
+
+  - name: Add Share User/Password
+    win_shell: cmdkey /add:172.16.12.198 /user:administrator /pass:password
+    become: yes
+    become_user: Administrator
+
+  - name: Add 14.19 Share User/Password
+    win_shell: cmdkey /add:172.16.14.19 /user:administrator /pass:Admin@20410d
+    become: yes
+    become_user: Administrator  
+
+  - name: Sipina
+    win_shell: choco install sipina -y -f --allow-empty-checksums
+
+  - name: Sipina Shotcuts
+    win_shortcut:
+     src:  C:\Program Files (x86)\StatPackage\sipina_research.exe
+     dest: C:\Sipina.lnk  
+
+  - name: Alyuda
+    win_shell: Copy-Item "\\172.16.12.198\SoftwareSources\AlyudaNeuroIntelligence" -Destination "C:\Program Files (x86)" -Recurse
+    become: yes
+    become_user: Administrator
+
+  - name: Alyuda Shotcuts
+    win_shortcut:
+      src: C:\Program Files (x86)\AlyudaNeuroIntelligence\NeuroIntelligence.exe
+      dest: C:\NeuroIntelligence.lnk
+
+  - name: RapidMiner
+    win_shell: choco install rapidminer -y -f --allow-empty-checksums
+
+  - name: EasyNN
+    win_shell: choco install easynn  -y -f --allow-empty-checksums
+
+  - name: tanagra
+    win_shell: choco install tanagra -y -f --allow-empty-checksums
+
+  - name: Tanagra Shotcuts
+    win_shortcut:
+      src: C:\Program Files (x86)\Tanagra\Tanagra.exe
+      dest: C:\Tanagra.lnk
+
+  - name: RGui
+    win_shell: choco install r -y -f --allow-empty-checksums
+
+  - name: Sipina Shotcuts
+    win_shortcut:
+     src:  C:\Program Files\R\R-3.5.3\bin\x64\Rgui.exe
+     dest: C:\Rgui.lnk
+
+  - name: Python 3.6.2
+    win_shell: choco install python3.6.2 -y -f --allow-empty-checksums
+
+  - name: Weka Source Copy
+    win_get_url:
+      url: http://172.16.12.198:8080/weka-3-9-3jre-x64.exe
+      dest: C:\
+
+  - name: Orange Copy
+    win_copy:
+      src: \\172.16.14.19\d\Orange New
+      dest: D:\
+      remote_src: yes
+    become: yes
+    become_method: runas
+    become_user: Administrator
+

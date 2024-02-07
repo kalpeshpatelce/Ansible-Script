@@ -1,0 +1,24 @@
+---
+- name: Charusat Service
+  hosts: 715D
+  gather_facts: no
+  tasks:
+
+#  - name: ping
+#    win_ping:
+#    ignore_errors: yes
+
+  - name: AutoAdminLogin Entry in Registry
+    win_shell: reg add "HKLM\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Winlogon" /v "AutoAdminLogon" /t REG_DWORD /d 1 /f
+
+  - name: Provide Computer Name
+    win_shell: reg add "HKLM\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Winlogon" /v "DefaultDomainName" /t REG_SZ /d "%COMPUTERNAME%" /f
+  
+  - name: Provide User Name
+    win_shell: reg add "HKLM\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Winlogon" /v "DefaultUserName" /t REG_SZ /d "Administrator" /f
+
+  - name: Provide Password
+    win_shell: reg add "HKLM\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Winlogon" /v "DefaultPassword" /t REG_SZ /d "Password" /f
+
+  - name: Restart PC
+    win_shell: shutdown -r -f -t 00
